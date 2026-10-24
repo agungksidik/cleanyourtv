@@ -1,0 +1,219 @@
+{
+ "events": [
+  {
+   "id": "753473",
+   "date": "2026-05-23T09:00Z",
+   "name": "PSBS Biak at Bhayangkara Presisi",
+   "competitions": [
+    {
+     "id": "753473",
+     "date": "2026-05-23T09:00Z",
+     "timeValid": true,
+     "status": {
+      "clock": 5400.0,
+      "displayClock": "90'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     },
+     "altGameNote": "Indonesian Super League",
+     "broadcast": "",
+     "competitors": [
+      {
+       "id": "18734",
+       "homeAway": "home",
+       "score": "7",
+       "team": {
+        "id": "18734",
+        "abbreviation": "BHA",
+        "displayName": "Bhayangkara Presisi",
+        "shortDisplayName": "Bhayangkara ",
+        "location": "Bhayangkara Presisi"
+       }
+      },
+      {
+       "id": "22338",
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "22338",
+        "abbreviation": "PSBS",
+        "displayName": "PSBS Biak",
+        "shortDisplayName": "PSBS Biak",
+        "location": "PSBS Biak"
+       }
+      }
+     ],
+     "playByPlayAthletes": true
+    }
+   ],
+   "status": {
+    "clock": 5400.0,
+    "displayClock": "90'",
+    "period": 2,
+    "type": {
+     "id": "28",
+     "name": "STATUS_FULL_TIME",
+     "state": "post",
+     "completed": true,
+     "description": "Full Time",
+     "detail": "FT",
+     "shortDetail": "FT"
+    }
+   }
+  },
+  {
+   "id": "753478",
+   "date": "2026-05-23T09:00Z",
+   "name": "Persijap at Persib Bandung",
+   "competitions": [
+    {
+     "id": "753478",
+     "date": "2026-05-23T09:00Z",
+     "timeValid": true,
+     "status": {
+      "clock": 5400.0,
+      "displayClock": "90'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     },
+     "altGameNote": "Indonesian Super League",
+     "broadcast": "",
+     "competitors": [
+      {
+       "id": "8293",
+       "homeAway": "home",
+       "score": "0",
+       "team": {
+        "id": "8293",
+        "abbreviation": "SIB",
+        "displayName": "Persib Bandung",
+        "shortDisplayName": "Persib Bandung",
+        "location": "Persib Bandung"
+       }
+      },
+      {
+       "id": "131305",
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "131305",
+        "abbreviation": "PER",
+        "displayName": "Persijap",
+        "shortDisplayName": "Persijap",
+        "location": "Persijap"
+       }
+      }
+     ],
+     "playByPlayAthletes": true
+    }
+   ],
+   "status": {
+    "clock": 5400.0,
+    "displayClock": "90'",
+    "period": 2,
+    "type": {
+     "id": "28",
+     "name": "STATUS_FULL_TIME",
+     "state": "post",
+     "completed": true,
+     "description": "Full Time",
+     "detail": "FT",
+     "shortDetail": "FT"
+    }
+   }
+  },
+  {
+   "id": "753472",
+   "date": "2026-05-23T09:00Z",
+   "name": "Semen Padang at Persija",
+   "competitions": [
+    {
+     "id": "753472",
+     "date": "2026-05-23T09:00Z",
+     "timeValid": true,
+     "status": {
+      "clock": 5400.0,
+      "displayClock": "90'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     },
+     "altGameNote": "Indonesian Super League",
+     "broadcast": "",
+     "competitors": [
+      {
+       "id": "8030",
+       "homeAway": "home",
+       "score": "3",
+       "team": {
+        "id": "8030",
+        "abbreviation": "PSJ",
+        "displayName": "Persija",
+        "shortDisplayName": "Persija",
+        "location": "Persija"
+       }
+      },
+      {
+       "id": "8034",
+       "homeAway": "away",
+       "score": "0",
+       "team": {
+        "id": "8034",
+        "abbreviation": "SPFC",
+        "displayName": "Semen Padang",
+        "shortDisplayName": "Semen Padang",
+        "location": "Semen Padang"
+       }
+      }
+     ],
+     "playByPlayAthletes": true
+    }
+   ],
+   "status": {
+    "clock": 5400.0,
+    "displayClock": "90'",
+    "period": 2,
+    "type": {
+     "id": "28",
+     "name": "STATUS_FULL_TIME",
+     "state": "post",
+     "completed": true,
+     "description": "Full Time",
+     "detail": "FT",
+     "shortDetail": "FT"
+    }
+   }
+  }
+ ],
+ "leagues": [
+  {
+   "id": "8339",
+   "name": "Indonesian Super League",
+   "abbreviation": "Indonesian Super League",
+   "slug": "idn.1"
+  }
+ ]
+}

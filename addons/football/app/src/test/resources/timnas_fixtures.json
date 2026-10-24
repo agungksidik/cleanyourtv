@@ -1,0 +1,257 @@
+{
+ "events": [
+  {
+   "id": "401919975",
+   "date": "2026-11-13T20:00Z",
+   "name": "Indonesia at Jordan",
+   "timeValid": false,
+   "competitions": [
+    {
+     "id": "401919975",
+     "date": "2026-11-13T20:00Z",
+     "timeValid": false,
+     "competitors": [
+      {
+       "id": "2917",
+       "homeAway": "home",
+       "team": {
+        "id": "2917",
+        "location": "Jordan",
+        "abbreviation": "JOR",
+        "displayName": "Jordan",
+        "shortDisplayName": "Jordan"
+       }
+      },
+      {
+       "id": "4895",
+       "homeAway": "away",
+       "team": {
+        "id": "4895",
+        "location": "Indonesia",
+        "abbreviation": "IDN",
+        "displayName": "Indonesia",
+        "shortDisplayName": "Indonesia"
+       }
+      }
+     ],
+     "status": {
+      "clock": 0.0,
+      "addedClock": 0.0,
+      "displayClock": "0'",
+      "period": 0,
+      "type": {
+       "id": "1",
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "detail": "11/13 - TBD",
+       "shortDetail": "TBD"
+      }
+     }
+    }
+   ],
+   "league": {
+    "id": "3922",
+    "alternateId": "53",
+    "name": "International Friendly",
+    "abbreviation": "Men's International Friendly",
+    "shortName": "Men's International Friendly",
+    "midsizeName": "FIFA.FRIENDLY",
+    "slug": "fifa.friendly",
+    "isTournament": false
+   }
+  },
+  {
+   "id": "401872248",
+   "date": "2027-01-11T20:00Z",
+   "name": "Indonesia at Japan",
+   "timeValid": false,
+   "competitions": [
+    {
+     "id": "401872248",
+     "date": "2027-01-11T20:00Z",
+     "timeValid": false,
+     "competitors": [
+      {
+       "id": "627",
+       "homeAway": "home",
+       "team": {
+        "id": "627",
+        "location": "Japan",
+        "abbreviation": "JPN",
+        "displayName": "Japan",
+        "shortDisplayName": "Japan"
+       }
+      },
+      {
+       "id": "4895",
+       "homeAway": "away",
+       "team": {
+        "id": "4895",
+        "location": "Indonesia",
+        "abbreviation": "IDN",
+        "displayName": "Indonesia",
+        "shortDisplayName": "Indonesia"
+       }
+      }
+     ],
+     "status": {
+      "clock": 0.0,
+      "addedClock": 0.0,
+      "displayClock": "0'",
+      "period": 0,
+      "type": {
+       "id": "1",
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "detail": "1/11 - TBD",
+       "shortDetail": "TBD"
+      }
+     }
+    }
+   ],
+   "league": {
+    "id": "20219",
+    "alternateId": "2243",
+    "name": "AFC Asian Cup",
+    "abbreviation": "AFC Asian Cup",
+    "shortName": "AFC Asian Cup",
+    "midsizeName": "AFC.ASIAN.CUP",
+    "slug": "afc.asian.cup",
+    "isTournament": true
+   }
+  },
+  {
+   "id": "401872260",
+   "date": "2027-01-16T20:00Z",
+   "name": "Qatar at Indonesia",
+   "timeValid": false,
+   "competitions": [
+    {
+     "id": "401872260",
+     "date": "2027-01-16T20:00Z",
+     "timeValid": false,
+     "competitors": [
+      {
+       "id": "4895",
+       "homeAway": "home",
+       "team": {
+        "id": "4895",
+        "location": "Indonesia",
+        "abbreviation": "IDN",
+        "displayName": "Indonesia",
+        "shortDisplayName": "Indonesia"
+       }
+      },
+      {
+       "id": "4398",
+       "homeAway": "away",
+       "team": {
+        "id": "4398",
+        "location": "Qatar",
+        "abbreviation": "QAT",
+        "displayName": "Qatar",
+        "shortDisplayName": "Qatar"
+       }
+      }
+     ],
+     "status": {
+      "clock": 0.0,
+      "addedClock": 0.0,
+      "displayClock": "0'",
+      "period": 0,
+      "type": {
+       "id": "1",
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "detail": "1/16 - TBD",
+       "shortDetail": "TBD"
+      }
+     }
+    }
+   ],
+   "league": {
+    "id": "20219",
+    "alternateId": "2243",
+    "name": "AFC Asian Cup",
+    "abbreviation": "AFC Asian Cup",
+    "shortName": "AFC Asian Cup",
+    "midsizeName": "AFC.ASIAN.CUP",
+    "slug": "afc.asian.cup",
+    "isTournament": true
+   }
+  },
+  {
+   "id": "401872273",
+   "date": "2027-01-20T20:00Z",
+   "name": "Indonesia at Thailand",
+   "timeValid": false,
+   "competitions": [
+    {
+     "id": "401872273",
+     "date": "2027-01-20T20:00Z",
+     "timeValid": false,
+     "competitors": [
+      {
+       "id": "4396",
+       "homeAway": "home",
+       "team": {
+        "id": "4396",
+        "location": "Thailand",
+        "abbreviation": "THA",
+        "displayName": "Thailand",
+        "shortDisplayName": "Thailand"
+       }
+      },
+      {
+       "id": "4895",
+       "homeAway": "away",
+       "team": {
+        "id": "4895",
+        "location": "Indonesia",
+        "abbreviation": "IDN",
+        "displayName": "Indonesia",
+        "shortDisplayName": "Indonesia"
+       }
+      }
+     ],
+     "status": {
+      "clock": 0.0,
+      "addedClock": 0.0,
+      "displayClock": "0'",
+      "period": 0,
+      "type": {
+       "id": "1",
+       "name": "STATUS_SCHEDULED",
+       "state": "pre",
+       "completed": false,
+       "description": "Scheduled",
+       "detail": "1/20 - TBD",
+       "shortDetail": "TBD"
+      }
+     }
+    }
+   ],
+   "league": {
+    "id": "20219",
+    "alternateId": "2243",
+    "name": "AFC Asian Cup",
+    "abbreviation": "AFC Asian Cup",
+    "shortName": "AFC Asian Cup",
+    "midsizeName": "AFC.ASIAN.CUP",
+    "slug": "afc.asian.cup",
+    "isTournament": true
+   }
+  }
+ ],
+ "team": {
+  "id": "4895",
+  "displayName": "Indonesia",
+  "abbreviation": "IDN"
+ }
+}

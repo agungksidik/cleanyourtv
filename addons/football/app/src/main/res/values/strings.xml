@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Jadwal Bola</string>
+    <string name="comp_timnas">Timnas Indonesia</string>
+    <string name="comp_liga1">Liga 1 · Super League</string>
+    <string name="comp_ucl">Liga Champions</string>
+    <string name="yesterday">Kemarin</string>
+    <string name="today">Hari ini</string>
+    <string name="tomorrow">Besok</string>
+    <string name="final_time">Selesai</string>
+    <string name="live">LIVE</string>
+    <string name="halftime">Jeda</string>
+    <string name="postponed">Ditunda</string>
+    <string name="canceled">Batal</string>
+    <string name="time_tbd">--:--</string>
+    <string name="vs">vs</string>
+    <string name="no_matches">Tidak ada pertandingan sampai %1$s.</string>
+    <string name="next_match">Berikutnya: %1$s %2$s, %3$s vs %4$s</string>
+    <string name="window">Kemarin sampai %1$s · jam WIB</string>
+    <string name="loading">Memuat…</string>
+    <string name="updated">ESPN · diperbarui %1$s</string>
+    <string name="offline">Tidak bisa terhubung ke ESPN. Data terakhir %1$s.</string>
+    <string name="no_data">Belum ada data. Periksa koneksi internet.</string>
+    <string-array name="day_names">
+        <item>Min</item>
+        <item>Sen</item>
+        <item>Sel</item>
+        <item>Rab</item>
+        <item>Kam</item>
+        <item>Jum</item>
+        <item>Sab</item>
+    </string-array>
+    <string-array name="month_names">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>Mei</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Agu</item>
+        <item>Sep</item>
+        <item>Okt</item>
+        <item>Nov</item>
+        <item>Des</item>
+    </string-array>
+</resources>

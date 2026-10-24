@@ -1,0 +1,289 @@
+{
+ "events": [
+  {
+   "id": "401854556",
+   "date": "2026-08-07T13:00Z",
+   "name": "Indonesia at Singapore",
+   "timeValid": true,
+   "competitions": [
+    {
+     "id": "401854556",
+     "date": "2026-08-07T13:00Z",
+     "timeValid": true,
+     "competitors": [
+      {
+       "id": "4384",
+       "homeAway": "home",
+       "team": {
+        "id": "4384",
+        "location": "Singapore",
+        "abbreviation": "SIN",
+        "displayName": "Singapore",
+        "shortDisplayName": "Singapore"
+       },
+       "score": {
+        "value": 1.0,
+        "displayValue": "1"
+       },
+       "record": [
+        {
+         "id": "0",
+         "abbreviation": "Total",
+         "displayName": "Overall",
+         "shortDisplayName": "OVER",
+         "description": "Overall Record",
+         "type": "total",
+         "displayValue": "2-2-0"
+        }
+       ]
+      },
+      {
+       "id": "4895",
+       "homeAway": "away",
+       "team": {
+        "id": "4895",
+        "location": "Indonesia",
+        "abbreviation": "IDN",
+        "displayName": "Indonesia",
+        "shortDisplayName": "Indonesia"
+       },
+       "score": {
+        "value": 1.0,
+        "displayValue": "1"
+       },
+       "record": [
+        {
+         "id": "0",
+         "abbreviation": "Total",
+         "displayName": "Overall",
+         "shortDisplayName": "OVER",
+         "description": "Overall Record",
+         "type": "total",
+         "displayValue": "2-1-1"
+        }
+       ]
+      }
+     ],
+     "status": {
+      "clock": 5400.0,
+      "addedClock": 600.0,
+      "displayClock": "90'+10'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     }
+    }
+   ],
+   "league": {
+    "id": "5672",
+    "alternateId": "2261",
+    "name": "ASEAN Championship",
+    "abbreviation": "ASEAN Champ",
+    "shortName": "ASEAN Champ",
+    "midsizeName": "AFF.CHAMPIONSHIP",
+    "slug": "aff.championship",
+    "isTournament": true
+   }
+  },
+  {
+   "id": "401854553",
+   "date": "2026-08-03T13:30Z",
+   "name": "Vietnam at Indonesia",
+   "timeValid": true,
+   "competitions": [
+    {
+     "id": "401854553",
+     "date": "2026-08-03T13:30Z",
+     "timeValid": true,
+     "competitors": [
+      {
+       "id": "4895",
+       "homeAway": "home",
+       "advance": false,
+       "team": {
+        "id": "4895",
+        "location": "Indonesia",
+        "abbreviation": "IDN",
+        "displayName": "Indonesia",
+        "shortDisplayName": "Indonesia"
+       },
+       "score": {
+        "value": 0.0,
+        "displayValue": "0"
+       },
+       "record": [
+        {
+         "id": "0",
+         "abbreviation": "Total",
+         "displayName": "Overall",
+         "shortDisplayName": "OVER",
+         "description": "Overall Record",
+         "type": "total",
+         "displayValue": "2-0-1"
+        }
+       ]
+      },
+      {
+       "id": "7349",
+       "homeAway": "away",
+       "advance": true,
+       "team": {
+        "id": "7349",
+        "location": "Vietnam",
+        "abbreviation": "VIE",
+        "displayName": "Vietnam",
+        "shortDisplayName": "Vietnam"
+       },
+       "score": {
+        "value": 3.0,
+        "displayValue": "3"
+       },
+       "record": [
+        {
+         "id": "0",
+         "abbreviation": "Total",
+         "displayName": "Overall",
+         "shortDisplayName": "OVER",
+         "description": "Overall Record",
+         "type": "total",
+         "displayValue": "2-1-0"
+        }
+       ]
+      }
+     ],
+     "status": {
+      "clock": 5400.0,
+      "addedClock": 180.0,
+      "displayClock": "90'+3'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     }
+    }
+   ],
+   "league": {
+    "id": "5672",
+    "alternateId": "2261",
+    "name": "ASEAN Championship",
+    "abbreviation": "ASEAN Champ",
+    "shortName": "ASEAN Champ",
+    "midsizeName": "AFF.CHAMPIONSHIP",
+    "slug": "aff.championship",
+    "isTournament": true
+   }
+  },
+  {
+   "id": "401854548",
+   "date": "2026-07-31T10:00Z",
+   "name": "Indonesia at Timor-Leste",
+   "timeValid": true,
+   "competitions": [
+    {
+     "id": "401854548",
+     "date": "2026-07-31T10:00Z",
+     "timeValid": true,
+     "competitors": [
+      {
+       "id": "8664",
+       "homeAway": "home",
+       "advance": false,
+       "team": {
+        "id": "8664",
+        "location": "Timor-Leste",
+        "abbreviation": "TLS",
+        "displayName": "Timor-Leste",
+        "shortDisplayName": "Timor-Leste"
+       },
+       "score": {
+        "value": 0.0,
+        "displayValue": "0"
+       },
+       "record": [
+        {
+         "id": "0",
+         "abbreviation": "Total",
+         "displayName": "Overall",
+         "shortDisplayName": "OVER",
+         "description": "Overall Record",
+         "type": "total",
+         "displayValue": "0-0-3"
+        }
+       ]
+      },
+      {
+       "id": "4895",
+       "homeAway": "away",
+       "advance": true,
+       "team": {
+        "id": "4895",
+        "location": "Indonesia",
+        "abbreviation": "IDN",
+        "displayName": "Indonesia",
+        "shortDisplayName": "Indonesia"
+       },
+       "score": {
+        "value": 3.0,
+        "displayValue": "3"
+       },
+       "record": [
+        {
+         "id": "0",
+         "abbreviation": "Total",
+         "displayName": "Overall",
+         "shortDisplayName": "OVER",
+         "description": "Overall Record",
+         "type": "total",
+         "displayValue": "2-0-0"
+        }
+       ]
+      }
+     ],
+     "status": {
+      "clock": 5400.0,
+      "addedClock": 180.0,
+      "displayClock": "90'+3'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     }
+    }
+   ],
+   "league": {
+    "id": "5672",
+    "alternateId": "2261",
+    "name": "ASEAN Championship",
+    "abbreviation": "ASEAN Champ",
+    "shortName": "ASEAN Champ",
+    "midsizeName": "AFF.CHAMPIONSHIP",
+    "slug": "aff.championship",
+    "isTournament": true
+   }
+  }
+ ],
+ "team": {
+  "id": "4895",
+  "displayName": "Indonesia",
+  "abbreviation": "IDN"
+ }
+}

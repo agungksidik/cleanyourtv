@@ -1,0 +1,288 @@
+{
+ "events": [
+  {
+   "id": "401915404",
+   "date": "2026-10-20T16:45Z",
+   "name": "Borussia Dortmund at Sabah FK",
+   "competitions": [
+    {
+     "id": "401915404",
+     "date": "2026-10-20T16:45Z",
+     "timeValid": true,
+     "status": {
+      "clock": 5400.0,
+      "displayClock": "90'+2'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     },
+     "altGameNote": "UEFA Champions League, League Phase",
+     "broadcast": "",
+     "competitors": [
+      {
+       "id": "21922",
+       "homeAway": "home",
+       "score": "1",
+       "team": {
+        "id": "21922",
+        "abbreviation": "SAB",
+        "displayName": "Sabah FK",
+        "shortDisplayName": "Sabah",
+        "location": "Sabah FK"
+       }
+      },
+      {
+       "id": "124",
+       "homeAway": "away",
+       "score": "2",
+       "team": {
+        "id": "124",
+        "abbreviation": "DOR",
+        "displayName": "Borussia Dortmund",
+        "shortDisplayName": "Dortmund",
+        "location": "Borussia Dortmund"
+       }
+      }
+     ],
+     "playByPlayAthletes": true
+    }
+   ],
+   "status": {
+    "clock": 5400.0,
+    "displayClock": "90'+2'",
+    "period": 2,
+    "type": {
+     "id": "28",
+     "name": "STATUS_FULL_TIME",
+     "state": "post",
+     "completed": true,
+     "description": "Full Time",
+     "detail": "FT",
+     "shortDetail": "FT"
+    }
+   }
+  },
+  {
+   "id": "401915395",
+   "date": "2026-10-21T16:45Z",
+   "name": "Manchester United at Como",
+   "competitions": [
+    {
+     "id": "401915395",
+     "date": "2026-10-21T16:45Z",
+     "timeValid": true,
+     "status": {
+      "clock": 5400.0,
+      "displayClock": "90'+4'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     },
+     "altGameNote": "UEFA Champions League, League Phase",
+     "broadcast": "",
+     "competitors": [
+      {
+       "id": "2572",
+       "homeAway": "home",
+       "score": "4",
+       "team": {
+        "id": "2572",
+        "abbreviation": "COMO",
+        "displayName": "Como",
+        "shortDisplayName": "Como",
+        "location": "Como"
+       }
+      },
+      {
+       "id": "360",
+       "homeAway": "away",
+       "score": "1",
+       "team": {
+        "id": "360",
+        "abbreviation": "MAN",
+        "displayName": "Manchester United",
+        "shortDisplayName": "Man United",
+        "location": "Manchester United"
+       }
+      }
+     ],
+     "playByPlayAthletes": true
+    }
+   ],
+   "status": {
+    "clock": 5400.0,
+    "displayClock": "90'+4'",
+    "period": 2,
+    "type": {
+     "id": "28",
+     "name": "STATUS_FULL_TIME",
+     "state": "post",
+     "completed": true,
+     "description": "Full Time",
+     "detail": "FT",
+     "shortDetail": "FT"
+    }
+   }
+  },
+  {
+   "id": "401915396",
+   "date": "2026-10-21T16:45Z",
+   "name": "Galatasaray at Lille",
+   "competitions": [
+    {
+     "id": "401915396",
+     "date": "2026-10-21T16:45Z",
+     "timeValid": true,
+     "status": {
+      "clock": 5400.0,
+      "displayClock": "90'+4'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     },
+     "altGameNote": "UEFA Champions League, League Phase",
+     "broadcast": "",
+     "competitors": [
+      {
+       "id": "166",
+       "homeAway": "home",
+       "score": "2",
+       "team": {
+        "id": "166",
+        "abbreviation": "LILL",
+        "displayName": "Lille",
+        "shortDisplayName": "Lille",
+        "location": "Lille"
+       }
+      },
+      {
+       "id": "432",
+       "homeAway": "away",
+       "score": "4",
+       "team": {
+        "id": "432",
+        "abbreviation": "GAL",
+        "displayName": "Galatasaray",
+        "shortDisplayName": "Galatasaray",
+        "location": "Galatasaray"
+       }
+      }
+     ],
+     "playByPlayAthletes": true
+    }
+   ],
+   "status": {
+    "clock": 5400.0,
+    "displayClock": "90'+4'",
+    "period": 2,
+    "type": {
+     "id": "28",
+     "name": "STATUS_FULL_TIME",
+     "state": "post",
+     "completed": true,
+     "description": "Full Time",
+     "detail": "FT",
+     "shortDetail": "FT"
+    }
+   }
+  },
+  {
+   "id": "401915394",
+   "date": "2026-10-21T19:00Z",
+   "name": "Viking FK at Aston Villa",
+   "competitions": [
+    {
+     "id": "401915394",
+     "date": "2026-10-21T19:00Z",
+     "timeValid": true,
+     "status": {
+      "clock": 5400.0,
+      "displayClock": "90'+5'",
+      "period": 2,
+      "type": {
+       "id": "28",
+       "name": "STATUS_FULL_TIME",
+       "state": "post",
+       "completed": true,
+       "description": "Full Time",
+       "detail": "FT",
+       "shortDetail": "FT"
+      }
+     },
+     "altGameNote": "UEFA Champions League, League Phase",
+     "broadcast": "",
+     "competitors": [
+      {
+       "id": "362",
+       "homeAway": "home",
+       "score": "3",
+       "team": {
+        "id": "362",
+        "abbreviation": "AVL",
+        "displayName": "Aston Villa",
+        "shortDisplayName": "Aston Villa",
+        "location": "Aston Villa"
+       }
+      },
+      {
+       "id": "510",
+       "homeAway": "away",
+       "score": "1",
+       "team": {
+        "id": "510",
+        "abbreviation": "VFK",
+        "displayName": "Viking FK",
+        "shortDisplayName": "Viking FK",
+        "location": "Viking FK"
+       }
+      }
+     ],
+     "playByPlayAthletes": true
+    }
+   ],
+   "status": {
+    "clock": 5400.0,
+    "displayClock": "90'+5'",
+    "period": 2,
+    "type": {
+     "id": "28",
+     "name": "STATUS_FULL_TIME",
+     "state": "post",
+     "completed": true,
+     "description": "Full Time",
+     "detail": "FT",
+     "shortDetail": "FT"
+    }
+   }
+  }
+ ],
+ "leagues": [
+  {
+   "id": "775",
+   "name": "UEFA Champions League",
+   "abbreviation": "UEFA Champions League",
+   "slug": "uefa.champions"
+  }
+ ]
+}
