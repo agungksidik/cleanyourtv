@@ -9,6 +9,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- photo_panel: the photo screensaver add-on's album pictures, granted only when it is signed with our key. -->
+    <uses-permission android:name="com.gathin.photodream.permission.READ_ALBUM" />
+    <!-- football_row: the football add-on's matches, granted only when it is signed with our key. -->
+    <uses-permission android:name="io.github.agungksidik.football.permission.READ_MATCHES" />
     <!-- Needed since Android 10 to read the Wi-Fi network name for the network pill. Never requested at
          runtime: build-and-install grants it with pm grant, so lint's Android 12 "ask for COARSE with
          FINE" rule does not apply here. -->

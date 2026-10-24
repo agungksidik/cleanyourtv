@@ -182,6 +182,12 @@ final class Config {
     final int homeIdleClockMinutes;
     /** The dock band as light frosted glass like the pills (config.xml, dock_glass); false keeps the solid band. */
     final boolean dockGlass;
+    /** Today's album pictures from the photo screensaver add-on in a panel on Home (theme photo_panel). */
+    boolean photoPanel;
+    /** "lat,lng": today's five prayer times under the clock (theme prayer_location); empty leaves them out. */
+    String prayerLocation = "";
+    /** The football add-on's matches under the clock (theme football_row). */
+    boolean footballRow;
     /** The dock band's padding equals the gap between its tiles (config.xml, dock_even_padding); false keeps the fixed padding. */
     final boolean dockEvenPadding;
     /** The dock position dots under the cinematic shelf's name (config.xml, cinematic_dots); false leaves them out. */
@@ -512,7 +518,7 @@ final class Config {
         Festival festival = json == null ? Festival.NONE : Festival.parse(string(json, "festival", ""),
                 string(json, "festival_until", ""), string(json, "greeting", ""), string(json, "accent_color", ""));
 
-        return new Config(dock, fillDock, hidden, libraryApps, liveTv, liveTvAction, liveTvInputId, packageMap(launchActions), packageMap(appLabels),
+        Config config = new Config(dock, fillDock, hidden, libraryApps, liveTv, liveTvAction, liveTvInputId, packageMap(launchActions), packageMap(appLabels),
                 packageMap(appBanners), panelService,
                 panelAction, panelExtra, coocaaSources, inputAction, inputUriScheme,
                 Math.max(1, columns), Math.max(0, rowsBelow), animations, advancedEffects,
@@ -521,6 +527,10 @@ final class Config {
                 wallpapers, rotationMinutes, wallpaperDim, dockOpacity, wallpaperOrder, applied,
                 festival, inputKeycodes, appKeys, stockHomeRedirect, json == null ? Collections.emptyList() : raceCalendar(json), cinematic, ambientGlow, appGlow, fadeRows,
                 Math.max(0, idleClockMinutes), keyFilter, dockGlass, glowStyle, wallpaperCaptions, handleViewInputs, tileMenu, dockEvenPadding, cinematicDots, cinematicWhiteFocus, wifiStatusColor, cinematicScrim, cinematicArt, wallpaperMoods, gamepadPassthrough);
+        config.photoPanel = json != null && bool(json, "photo_panel", false);
+        config.prayerLocation = json == null ? "" : string(json, "prayer_location", "");
+        config.footballRow = json != null && bool(json, "football_row", false);
+        return config;
     }
 
     /**

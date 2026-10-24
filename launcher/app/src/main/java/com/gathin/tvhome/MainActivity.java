@@ -182,6 +182,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private TextView stats;
     private List<RaceWeekend.Race> raceCalendar;
     private View racePanel;
+    private PhotoPanel photoPanel;
+    private HomeInfo homeInfo;
     private TextView raceKicker, raceHeadline, raceSessions;
     /** config.xml show_stats, overridable by a theme. Off: the line is gone and nothing is read. */
     private boolean showStats;
@@ -524,6 +526,16 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         Order savedOrder = Order.load(Order.file(this));
         adapter.setSavedOrder(Order.ranks(savedOrder, dockApps), Order.docked(savedOrder, dockApps));
         grid.setAdapter(adapter);
+        View layer = grid;
+        while (layer.getParent() != root && layer.getParent() instanceof View) layer = (View) layer.getParent();
+        if (!cfg.prayerLocation.isEmpty() || cfg.footballRow) {
+            homeInfo = new HomeInfo(this, root, layer, cfg.prayerLocation, cfg.footballRow);
+            if (!homeInfo.shown()) homeInfo = null;
+        }
+        if (cfg.photoPanel) {
+            photoPanel = new PhotoPanel(this, root, grid, findViewById(R.id.topButtons), layer,
+                    homeInfo == null ? null : homeInfo.column);
+        }
 
         // tvOS layout: push the dock row towards the bottom of the screen, leaving room for
         // rows_below_dock grid rows under it; the rest of the grid stays below until you press Down.
@@ -857,6 +869,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         sky.update();
         wallpaperPlayer.start();
         handler.postDelayed(minuteTick, MINUTE_MS);
+        if (photoPanel != null) photoPanel.start();
+        if (homeInfo != null) homeInfo.start();
         if (festive && diya != null) {
             diya.start();
             LocalDate today = LocalDate.now();
@@ -1030,6 +1044,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         ambient.animate().cancel();
         heroArt.animate().cancel();
         handler.removeCallbacks(minuteTick);
+        if (photoPanel != null) photoPanel.stop();
+        if (homeInfo != null) homeInfo.stop();
         stopStats();
         if (diya != null) diya.stop();
         cancelPendingFocusScroll();
