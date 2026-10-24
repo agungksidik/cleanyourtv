@@ -67,6 +67,26 @@ first run is remembered for `--off`; `build-and-install.sh --uninstall` does `--
 `IDLE_MINUTES` sets `screen_off_timeout`, after which the TV starts its screensaver. You can also pick
 Photos yourself in the TV's screensaver settings.
 
+## A shared Google Photos album, by date
+
+Instead of copying pictures over ADB, the TV can fetch them itself from a shared Google Photos album: each day
+up to 30 photos taken on today's date in earlier years. When the day has fewer than 10, it widens to 3 days
+either side, then 7, then the same month, and fills up from the whole album. Videos are left out. The file
+name ends in the date taken, so "When a picture was taken" shows it.
+
+```sh
+TV_HOST=192.168.1.50 addons/photo-screensaver/album.sh https://photos.app.goo.gl/XXXX
+TV_HOST=192.168.1.50 addons/photo-screensaver/album.sh --off
+```
+
+The link goes into `album.txt`. A job checks every 3 hours while the TV is on a network and fetches once a day;
+opening the card or the screensaver also checks. Yesterday's album pictures are removed; pictures from
+`sync.sh` stay. Three prints suits phone photos, which full screen crops.
+
+This reads the album the way its own web page does, not through a Google API, so a change on Google's side
+can stop it; the pictures already on the TV keep showing. Anyone with the link can see the album: use one
+made for the TV.
+
 ## Memory
 
 At most two screen-sized pictures are held, as GPU bitmaps, and one hardware video player. A 4K picture
@@ -74,6 +94,10 @@ is decoded at screen size. On a TCL 43P69K (1.5 GB) a 1080p clip played with the
 42 MB and 705 MB RAM still free.
 
 ## Permissions
+
+- **Network for the album**: with `album.txt` set, the album's address goes to `photos.google.com` and the
+  pictures come from `lh3.googleusercontent.com`, once a day. Without it, no album traffic.
+- **Start at boot** (`RECEIVE_BOOT_COMPLETED`), only to keep the album job scheduled after a restart.
 
 - **Network: `INTERNET` and `ACCESS_COARSE_LOCATION`**, used only by the weather option, which is off by
   default. With it on, the TV's rough location, rounded to two decimals (about 1 km), goes to

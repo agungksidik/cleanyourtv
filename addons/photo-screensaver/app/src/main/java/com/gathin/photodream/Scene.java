@@ -102,6 +102,7 @@ final class Scene {
         running = true;
         if (slides != null) slides.start();
         if (prints != null) prints.start();
+        AlbumSync.startIfDue(context);
         handler.post(tick);
         if (options.weather) {
             network = Executors.newSingleThreadExecutor();

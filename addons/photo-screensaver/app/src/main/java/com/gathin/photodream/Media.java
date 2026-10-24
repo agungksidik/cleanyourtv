@@ -41,6 +41,7 @@ final class Media {
     static String path(List<String> segments) {
         if (segments == null) return null;
         if (segments.size() == 1 && SECONDS.equals(segments.get(0))) return SECONDS;
+        if (segments.size() == 1 && AlbumSync.FILE.equals(segments.get(0))) return AlbumSync.FILE;
         if (segments.size() == 2 && PICTURES.equals(segments.get(0)) && file(segments.get(1))) {
             return PICTURES + "/" + segments.get(1);
         }
