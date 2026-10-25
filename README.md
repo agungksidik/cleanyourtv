@@ -121,9 +121,37 @@ tools/theme.sh work/family-home
 | `prayer_location` | `"-6.2088,106.8456"` | The five prayer times for that place, in the TV's time zone. Empty leaves them out. |
 | `football_row` | `true` | The football cell. Needs the football add-on. |
 | `rows_below_dock` | `0` | Pushes the dock down, which leaves room for the carousel. |
+| `minimal_home` | `true` | One dock row only, a small name above it, darker glass pills and a shade from the top so the clock reads over a light photo. The app library becomes a grid of every TV app that scrolls down. |
+| `library_tile` | `true` | The app library as the dock's last tile. Needs `app_library`. |
+| `volume_step` | `true` | Vol+ and Vol- move one step per press and repeat while held. For TCL G06, where the key helper made each press move two steps. |
+| `tile_menu` | `true` | Hold OK on a tile for Move, Remove from Home and App info: the owner sets the row's order on the TV. |
 
 Put wallpapers in `work/family-home/wallpapers/` as upstream's themes do (1280x720 JPEGs). With
 `wallpaper_captions`, credit each picture in `wallpapers/captions.txt`.
+
+### 4b. Or: a minimal Home with your own photos
+
+Instead of the album carousel, Home can show the family's own photos full screen behind one row of apps, and
+the screensaver can show the same photos. The photos stay on your computer and the TV; `work/` is ignored by
+git, so they never go into a commit.
+
+1. Put 10 to 30 photos in one folder. Landscape photos fill the screen best.
+2. Crop them to 1280x720 so no face is cut. On a Mac, `tools/facecrop.swift` finds the faces with Apple's
+   Vision framework (on the computer, nothing is uploaded) and skips a photo whose faces don't fit one 16:9
+   frame. On other systems, crop them by hand.
+3. Push them as the wallpapers of a theme with the keys above, and sync them to the screensaver.
+
+```bash
+mkdir -p work/family-photos/wallpapers && cp docs/fork/family-home.json work/family-photos/config.json
+# edit config.json: "photo_panel": false, "minimal_home": true, "app_library": true, "library_tile": true,
+#                   "tile_menu": true, "wallpaper_captions": false (and "volume_step": true on a TCL G06)
+swift tools/facecrop.swift ~/Pictures/tv work/family-photos/wallpapers
+tools/theme.sh work/family-photos
+addons/photo-screensaver/album.sh --off                                   # if an album was set
+bash addons/photo-screensaver/sync.sh work/family-photos/wallpapers        # same photos in the screensaver
+```
+
+Hold OK on a tile and pick Move to change the order of the row; the app library tile stays last.
 
 ### 5. Answer the card prompts and close ADB
 
@@ -162,8 +190,10 @@ AGENTS.md and PROMPT.md first and follow their safety rules: disable, never unin
 Home guard; ask before anything the family uses.
 
 1. Ask me for: the TV's IP address; whether the TV is already cleaned up with this repo (if not, run PROMPT.md
-   first); the city for prayer times (turn it into latitude,longitude); the share link of a Google Photos album
-   made for the TV (suggest a live album of chosen people); whether I want the football row.
+   first); the city for prayer times (turn it into latitude,longitude); whether I want the football row; and
+   which photos I want: a shared Google Photos album made for the TV (suggest a live album of chosen people),
+   or my own photos full screen behind one row of apps (section 4b). For my own photos, ask me to prepare a
+   folder of 10 to 30 photos and give you its path. Do not pick or download photos for me.
 2. Connect with tools/tv.py and check: Android version 8 or later, `dumpsys window | grep mSafeMode`, the time
    zone (`getprop persist.sys.timezone`). If the time zone is wrong for my city, tell me and fix it only after
    I agree.
@@ -173,7 +203,8 @@ Home guard; ask before anything the family uses.
 4. Verify that READ_ALBUM and READ_MATCHES show granted=true for com.gathin.tvhome, then take a screenshot of
    Home with tools/tv.py --screenshot and look at it: prayer row, football cell, carousel with pictures. If the
    carousel is empty, check the album sync (`ls /sdcard/Android/data/com.gathin.photodream/files/pictures`).
-5. Never put the album link, my IP address, my city or screenshots of my family into git or anything public.
+5. Never put the album link, my photos, my IP address, my city or screenshots of my family into git or anything
+   public. My photos stay in work/, which git ignores. Show me the crops before you push them to the TV.
 6. At the end, tell me what was installed and how to undo it (tools/theme.sh --reset, album.sh --off,
    pm uninstall of the add-ons), and remind me to switch USB debugging off; then run tools/adb-closed.py.
 ```
@@ -183,6 +214,7 @@ Home guard; ask before anything the family uses.
 ```bash
 tools/theme.sh --reset                                    # upstream look, keys off
 addons/photo-screensaver/album.sh --off                   # album pictures removed
+bash addons/photo-screensaver/sync.sh --off               # own photos removed, previous screensaver back
 tools/venv/bin/python -I tools/tv.py 'pm uninstall io.github.agungksidik.football'
 bash addons/photo-screensaver/build-and-install.sh --uninstall
 ```
