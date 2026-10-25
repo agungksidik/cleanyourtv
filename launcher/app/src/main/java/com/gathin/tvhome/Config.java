@@ -188,6 +188,13 @@ final class Config {
     String prayerLocation = "";
     /** The football add-on's matches under the clock (theme football_row). */
     boolean footballRow;
+    /** The key helper steps the volume itself, once per press (theme volume_step): TCL G06 firmware steps twice
+     *  for each press while a service filters keys. */
+    boolean volumeStep;
+    /** The app library as the dock's last tile (theme library_tile, with app_library on). */
+    boolean libraryTile;
+    /** Home as one dock row with a small name, darker glass and a top shade (theme minimal_home). */
+    boolean minimalHome;
     /** The dock band's padding equals the gap between its tiles (config.xml, dock_even_padding); false keeps the fixed padding. */
     final boolean dockEvenPadding;
     /** The dock position dots under the cinematic shelf's name (config.xml, cinematic_dots); false leaves them out. */
@@ -530,6 +537,9 @@ final class Config {
         config.photoPanel = json != null && bool(json, "photo_panel", false);
         config.prayerLocation = json == null ? "" : string(json, "prayer_location", "");
         config.footballRow = json != null && bool(json, "football_row", false);
+        config.volumeStep = json != null && bool(json, "volume_step", false);
+        config.libraryTile = json != null && bool(json, "library_tile", false);
+        config.minimalHome = json != null && bool(json, "minimal_home", false);
         return config;
     }
 

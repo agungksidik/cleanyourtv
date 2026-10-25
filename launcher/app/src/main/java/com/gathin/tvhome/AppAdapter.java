@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +63,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static final class Entry {
-        static final int APP = 0, HOME_SETTINGS = 1, CARD = 2, EMPTY = 3;
+        static final int APP = 0, HOME_SETTINGS = 1, CARD = 2, EMPTY = 3, LIBRARY = 4;
 
         final int kind;
         final String label;
@@ -198,6 +199,10 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /** Packages with a leanback entry at the last reload(): their tiles launch with the leanback category. */
     private Set<String> leanbackPackages = new HashSet<>();
     private final boolean showHomeSettings;
+    /** library_tile: the app library as the dock's last tile (needs app_library). */
+    private final boolean libraryTile;
+    /** minimal_home: the dock row only; the rest are in the app library. */
+    private final boolean dockOnly;
     /** Calmer motion for weak GPUs (config.xml, reduced_motion): no overshoot, shorter fades. */
     private final boolean reducedMotion;
     /** The focus zoom may overshoot (config.xml, focus_overshoot). */
@@ -221,7 +226,10 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.animations = cfg.animations;
         this.advancedEffects = cfg.animations && cfg.advancedEffects;
         this.showHomeSettings = cfg.showHomeSettingsShortcut;
-        this.showLibrary = cfg.appLibrary;
+        this.libraryTile = cfg.libraryTile && cfg.appLibrary;
+        this.dockOnly = cfg.minimalHome && cfg.dockRow;
+        // minimal_home: the library is the dock's last tile, so no library row under a grid that is not there.
+        this.showLibrary = cfg.appLibrary && !(cfg.minimalHome && cfg.dockRow);
         this.reducedMotion = cfg.reducedMotion;
         this.focusOvershoot = cfg.focusOvershoot;
         this.rowsBelowDock = cfg.rowsBelowDock;
@@ -321,6 +329,14 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             fresh.add(docked + i, new Entry(Entry.EMPTY, "", new ComponentName(ctx, "empty-dock-slot-" + i),
                     null, null, null, 0));
         }
+        if (libraryTile && dockRow && !reordering) {
+            Entry library = new Entry(Entry.LIBRARY, ctx.getString(R.string.app_library),
+                    new ComponentName(ctx, "library-tile"), null, ctx.getDrawable(R.drawable.ic_apps), null, 0);
+            int slot = Math.min(dockSize - 1, fresh.size());
+            if (slot < fresh.size() && fresh.get(slot).kind == Entry.EMPTY) fresh.set(slot, library);
+            else fresh.add(slot, library);
+        }
+        if (dockOnly && !reordering && fresh.size() > dockSize) fresh.subList(dockSize, fresh.size()).clear();
         items.clear();
         items.addAll(fresh);
         notifyDataSetChanged();
@@ -450,8 +466,18 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             h.label.setText(e.label);
             h.label.setVisibility(View.VISIBLE);
         }
+        // The library tile is its glyph alone, centred: the name shows above the dock when it is focused.
+        boolean glyphOnly = e.kind == Entry.LIBRARY;
+        if (glyphOnly) h.label.setVisibility(View.GONE);
+        FrameLayout.LayoutParams iconAt = (FrameLayout.LayoutParams) h.icon.getLayoutParams();
+        int bottom = glyphOnly ? 0 : Math.round(14 * ctx.getResources().getDisplayMetrics().density);
+        if (iconAt.bottomMargin != bottom) {
+            iconAt.bottomMargin = bottom;
+            h.icon.setLayoutParams(iconAt);
+        }
         h.card.setOnClickListener(v -> launch(e));
         h.card.setOnLongClickListener(v -> {
+            if (e.kind == Entry.LIBRARY) return true;
             if (tileMenu) {
                 int pos = h.getBindingAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) listener.onTileLongPress(pos, v);
@@ -469,6 +495,10 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /** Opens the tile's activity by explicit component, with no extras: a card can name nothing else. */
     private void launch(Entry e) {
+        if (e.kind == Entry.LIBRARY) {
+            listener.onLibraryRequested();
+            return;
+        }
         if (e.kind == Entry.HOME_SETTINGS) {
             ctx.startActivity(new Intent(ctx, HomeSettingsActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -555,7 +585,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         List<String> keys = new ArrayList<>();
         for (int i = 0; i < movableCount(); i++) {
             Entry e = items.get(i);
-            if (e.kind != Entry.EMPTY) keys.add(e.component.flattenToShortString());
+            if (e.kind != Entry.EMPTY && e.kind != Entry.LIBRARY) keys.add(e.component.flattenToShortString());
         }
         return keys;
     }

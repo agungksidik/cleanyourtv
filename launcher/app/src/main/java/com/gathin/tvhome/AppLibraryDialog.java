@@ -33,6 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.dynamicanimation.animation.FloatPropertyCompat;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -78,6 +79,8 @@ final class AppLibraryDialog {
     private final LibraryLoads loads = new LibraryLoads();
     private final Activity activity;
     private final Predicate<String> onHome;
+    /** minimal_home: every TV app, alphabetical, and OK opens it; nothing to add since Home shows one row. */
+    boolean browseAll;
     private final Runnable changed;
     private final LinearLayout panel;
     private final boolean reducedMotion;
@@ -121,7 +124,11 @@ final class AppLibraryDialog {
         highlight.setLayoutParams(lp);
         highlight.setTranslationY(rect.top - dp(6));
         float x = rect.left - dp(6) + scrollOffset;
-        if (!highlightShown || !animate || !animations) {
+        if (browseAll) {
+            // The grid scrolls down, so the spring (across only) is skipped and the glass jumps to the card.
+            spring.cancel();
+            highlight.setTranslationX(rect.left - dp(6));
+        } else if (!highlightShown || !animate || !animations) {
             spring.cancel();
             highlight.setTranslationX(x - scrollOffset);
         } else spring.animateToFinalPosition(x);
@@ -266,6 +273,7 @@ final class AppLibraryDialog {
     }
 
     private void fill(List<ResolveInfo> catalogue) {
+        if (browseAll) catalogue.removeIf(app -> !tvPackages.contains(app.activityInfo.packageName));
         totalApps = catalogue.size();
         apps = catalogue;
         Map<String, Boolean> home = new HashMap<>();
@@ -277,6 +285,10 @@ final class AppLibraryDialog {
         Collator collator = Collator.getInstance();
         apps.sort((a, b) -> {
             String pa = a.activityInfo.packageName, pb = b.activityInfo.packageName;
+            if (browseAll) {
+                int byName = collator.compare(label(a), label(b));
+                return byName != 0 ? byName : pa.compareTo(pb);
+            }
             if (selectionMode) return LibraryApps.compareCatalog(home.get(pa), label(a), pa,
                     home.get(pb), label(b), pb, collator);
             int priority = LibraryApps.comparePriority(home.get(pa), installTimes.get(pa),
@@ -339,12 +351,13 @@ final class AppLibraryDialog {
     private String hint(boolean home) {
         if (selectionMode) return activity.getString(android.R.string.ok) + ": "
                 + activity.getString(home ? R.string.library_remove_shortcut : R.string.library_add_home);
-        return activity.getString(home ? R.string.library_hint_open : R.string.library_hint_add);
+        return activity.getString(home || browseAll ? R.string.library_hint_open : R.string.library_hint_add);
     }
 
     private void showCatalog() {
         stopHighlight();
-        resize(catalogWidth, dp(280));
+        int decorHeight = activity.getWindow().getDecorView().getHeight();
+        resize(catalogWidth, browseAll ? Math.max(dp(280), Math.min(dp(560), decorHeight - dp(64))) : dp(280));
         panel.removeAllViews();
         LinearLayout header = new LinearLayout(activity);
         header.setGravity(Gravity.CENTER_VERTICAL);
@@ -379,9 +392,14 @@ final class AppLibraryDialog {
         RecyclerView list = new RecyclerView(activity);
         list.setLayoutDirection(rtl ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         catalog = list;
-        list.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false) {
-            @Override protected boolean isLayoutRTL() { return rtl; }
-        });
+        if (browseAll) {
+            // minimal_home: every TV app in rows that scroll down, as on tvOS.
+            list.setLayoutManager(new GridLayoutManager(activity, Math.max(1, (catalogWidth - dp(44)) / dp(144))));
+        } else {
+            list.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false) {
+                @Override protected boolean isLayoutRTL() { return rtl; }
+            });
+        }
         list.setItemAnimator(null);
         list.setOverScrollMode(View.OVER_SCROLL_NEVER);
         list.setClipToPadding(false);
@@ -405,6 +423,7 @@ final class AppLibraryDialog {
             @Override public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 scrollOffset += dx;
                 highlight.setTranslationX(highlight.getTranslationX() - dx);
+                highlight.setTranslationY(highlight.getTranslationY() - dy);
             }
         });
         panel.addView(shelf, new LinearLayout.LayoutParams(-1, 0, 1));
@@ -635,10 +654,10 @@ final class AppLibraryDialog {
             name.setText(label(app));
             name.setEllipsize(TextUtils.TruncateAt.END);
             TextView status = holder.itemView.findViewById(R.id.status);
-            boolean home = onHome.test(pkg);
-            boolean recent = !selectionMode && LibraryApps.recent(installTimes.getOrDefault(pkg, 0L), catalogTime);
+            boolean home = !browseAll && onHome.test(pkg);
+            boolean recent = !selectionMode && !browseAll && LibraryApps.recent(installTimes.getOrDefault(pkg, 0L), catalogTime);
             status.setText(home ? R.string.library_on_home : recent ? R.string.library_recent : R.string.library_add_home);
-            status.setVisibility(View.VISIBLE);
+            status.setVisibility(browseAll ? View.GONE : View.VISIBLE);
             holder.itemView.setBackground(surface(home ? 0x1475BBA4 : 0x0CFFFFFF, 18));
             View check = holder.itemView.findViewById(R.id.dot);
             check.getLayoutParams().width = dp(home ? 18 : 8);
@@ -648,7 +667,7 @@ final class AppLibraryDialog {
             check.setVisibility(home || recent ? View.VISIBLE : View.GONE);
             holder.itemView.setOnClickListener(v -> {
                 if (selectionMode) changeHome(app, !onHome.test(pkg));
-                else if (onHome.test(pkg)) open(app);
+                else if (browseAll || onHome.test(pkg)) open(app);
                 else changeHome(app, true);
             });
             holder.itemView.setOnLongClickListener(selectionMode ? null : v -> { showActions(app, v); return true; });
@@ -663,6 +682,7 @@ final class AppLibraryDialog {
             });
             holder.itemView.setOnKeyListener((v, key, event) -> {
                 int index = holder.getBindingAdapterPosition();
+                if (browseAll) return false;   // the grid moves focus in all four directions
                 return event.getAction() == KeyEvent.ACTION_DOWN && (key == KeyEvent.KEYCODE_DPAD_UP
                         || key == KeyEvent.KEYCODE_DPAD_DOWN
                         || (rtl ? key == KeyEvent.KEYCODE_DPAD_RIGHT : key == KeyEvent.KEYCODE_DPAD_LEFT) && index == 0

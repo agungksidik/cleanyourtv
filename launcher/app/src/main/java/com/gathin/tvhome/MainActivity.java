@@ -275,6 +275,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private String dockEditAppKey;
     private AppLibraryDialog appLibrary;
     private boolean appLibrarySelection;
+    /** minimal_home: the app library lists every TV app and opens it. */
+    private boolean libraryBrowseAll;
     private boolean libraryFocusPending;
     private RecyclerView.OnScrollListener pendingFocusScroll;
 
@@ -422,6 +424,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // dock_title false: the name above the dock (and the cinematic lines under it) never shows; the glow
         // still follows the dock.
         if (!cfg.dockTitle) hero.setVisibility(View.GONE);
+        libraryBrowseAll = cfg.minimalHome;
+        if (cfg.minimalHome) setUpMinimalHome();
         greeting = findViewById(R.id.greeting);
         clockBlock = findViewById(R.id.leftBlock);
         greetingColor = greeting.getCurrentTextColor();
@@ -529,7 +533,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         View layer = grid;
         while (layer.getParent() != root && layer.getParent() instanceof View) layer = (View) layer.getParent();
         if (!cfg.prayerLocation.isEmpty() || cfg.footballRow) {
-            homeInfo = new HomeInfo(this, root, layer, cfg.prayerLocation, cfg.footballRow);
+            homeInfo = new HomeInfo(this, root, layer, cfg.prayerLocation, cfg.footballRow, cfg.minimalHome);
             if (!homeInfo.shown()) homeInfo = null;
         }
         if (cfg.photoPanel) {
@@ -1489,6 +1493,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             });
         });
         openPopup = appLibrary.popup;
+        appLibrary.browseAll = libraryBrowseAll;
         appLibrary.show();
     }
 
@@ -1664,6 +1669,20 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
      * The parts that never change: a larger name, the meta line and the dots, the artwork and the scrim, at
      * scrimPercent of its strength (cinematic_scrim). cinematic_art 0 leaves the artwork out, 0 percent the scrim.
      */
+    /**
+     * minimal_home: a small name over the dock, as tvOS shows it, and a shade from the top edge so the clock,
+     * date and greeting read over a light family photo.
+     */
+    private void setUpMinimalHome() {
+        heroName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
+        heroName.setLetterSpacing(0f);
+        View scrim = findViewById(R.id.heroScrim);
+        scrim.setBackground(new android.graphics.drawable.GradientDrawable(
+                android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{0xB3000000, 0x59000000, 0x00000000, 0x00000000, 0x40000000}));
+        scrim.setVisibility(View.VISIBLE);
+    }
+
     private void setUpCinematicShelf(int scrimPercent) {
         heroName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 68f);
         heroName.setLetterSpacing(-0.025f);
