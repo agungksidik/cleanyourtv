@@ -6,12 +6,13 @@ family in Indonesia on top of the [cleanyourtv](https://github.com/Gathin23/clea
 (MIT), whose own README is kept in [UPSTREAM.md](UPSTREAM.md). It runs every day on two TCL 32" G06 sets
 (Google TV 11, 1.4 GB RAM).
 
-![Family Home on a TCL 32" G06. The photo carousel is blurred here; on the TV it shows the family's pictures](docs/fork/family-home.jpg)
+![Family Home on a TCL 32" G06 with minimal_home: prayer times and football under the clock, one row of apps with the app library as its last tile. On the TV the wallpapers are the family's own photos](docs/fork/family-home.jpg)
 
 What it adds to the cleanyourtv launcher:
 
 | Part | What it does | Network |
 |---|---|---|
+| Minimal Home (`minimal_home`, `library_tile`) | One row of apps over the family's own photos, a small name above it, the app library as the last tile: a grid of every TV app that scrolls down. Hold OK on a tile to reorder. See section 4b. | none |
 | Photo carousel (`photo_panel`) | Four cards above the dock: three narrow and one wide with the date the photo was taken. A new picture comes in every 9 seconds and the others move left. | none in the launcher |
 | Prayer times (`prayer_location`) | One row under the clock: Subuh, Dzuhur, Ashar, Maghrib, Isya, the next one lit. Computed on the TV with Kemenag's angles (Fajr 20°, Isha 18°), within a minute of Aladhan's method 20. | none |
 | Football (`football_row`) | One cell after the prayer times, turning every 8 seconds: Timnas Indonesia, Liga 1 and the Champions League, with live scores. | none in the launcher |
