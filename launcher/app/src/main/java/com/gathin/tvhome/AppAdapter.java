@@ -203,6 +203,8 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final boolean libraryTile;
     /** minimal_home: the dock row only; the rest are in the app library. */
     private final boolean dockOnly;
+    /** Every app tile's key in order, also the ones minimal_home leaves out of the row. */
+    private final List<String> allKeys = new ArrayList<>();
     /** Calmer motion for weak GPUs (config.xml, reduced_motion): no overshoot, shorter fades. */
     private final boolean reducedMotion;
     /** The focus zoom may overshoot (config.xml, focus_overshoot). */
@@ -329,13 +331,16 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             fresh.add(docked + i, new Entry(Entry.EMPTY, "", new ComponentName(ctx, "empty-dock-slot-" + i),
                     null, null, null, 0));
         }
-        if (libraryTile && dockRow && !reordering) {
+        // minimal_home keeps the tile while reordering, so the row looks the same and the order saved matches it.
+        if (libraryTile && dockRow && (!reordering || dockOnly)) {
             Entry library = new Entry(Entry.LIBRARY, ctx.getString(R.string.app_library),
                     new ComponentName(ctx, "library-tile"), null, ctx.getDrawable(R.drawable.ic_apps), null, 0);
             int slot = Math.min(dockSize - 1, fresh.size());
             if (slot < fresh.size() && fresh.get(slot).kind == Entry.EMPTY) fresh.set(slot, library);
             else fresh.add(slot, library);
         }
+        allKeys.clear();
+        for (Entry e : fresh) if (e.kind == Entry.APP || e.kind == Entry.CARD) allKeys.add(e.component.flattenToShortString());
         if (dockOnly && !reordering && fresh.size() > dockSize) fresh.subList(dockSize, fresh.size()).clear();
         items.clear();
         items.addAll(fresh);
@@ -603,6 +608,21 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     /** Stable key for the app at a position (its component), or null. */
+    /** The app library tile (library_tile), which never moves. */
+    boolean isLibraryTile(int position) {
+        return position >= 0 && position < items.size() && items.get(position).kind == Entry.LIBRARY;
+    }
+
+    /** All app keys in order, also those minimal_home keeps out of the row. */
+    List<String> allKeys() {
+        return new ArrayList<>(allKeys);
+    }
+
+    /** How many apps the row holds: the dock, less the library tile's place. */
+    int rowApps() {
+        return libraryTile && dockRow ? dockSize - 1 : dockSize;
+    }
+
     String keyAt(int position) {
         return position >= 0 && position < items.size() ? items.get(position).component.flattenToShortString() : null;
     }

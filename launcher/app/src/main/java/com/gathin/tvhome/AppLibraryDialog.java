@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 /** On-demand installed-app picker. Uses the launcher's glass resources; no backdrop capture or blur. */
@@ -81,6 +82,8 @@ final class AppLibraryDialog {
     private final Predicate<String> onHome;
     /** minimal_home: every TV app, alphabetical, and OK opens it; nothing to add since Home shows one row. */
     boolean browseAll;
+    /** With browseAll: Add to Home and Remove from Home put the app into the row or take it out (package, add). */
+    BiConsumer<String, Boolean> rowChange;
     private final Runnable changed;
     private final LinearLayout panel;
     private final boolean reducedMotion;
@@ -456,6 +459,12 @@ final class AppLibraryDialog {
     }
 
     private void changeHome(ResolveInfo app, boolean add) {
+        if (browseAll && rowChange != null) {
+            dismissActions();
+            rowChange.accept(app.activityInfo.packageName, add);
+            refresh();
+            return;
+        }
         if (!LibraryApps.save(activity, app.activityInfo.packageName, add)) {
             Toast.makeText(activity, R.string.library_save_failed, Toast.LENGTH_LONG).show();
             return;

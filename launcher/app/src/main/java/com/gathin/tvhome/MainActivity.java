@@ -1232,7 +1232,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         dockedAtStart = adapter.dockFilled();
         for (int i = 0; i < Math.min(dockedAtStart, adapter.movableCount()); i++) dockInSession.add(adapter.keyAt(i));
         adapter.setReordering(true);
-        if (adapter.hasEmptySlots()) reloadTiles();   // every position must hold a tile that can move
+        // every position must hold a tile that can move; minimal_home also brings back the apps kept out of the row
+        if (adapter.hasEmptySlots() || libraryBrowseAll) reloadTiles();
         reordering = true;
         orderAtStart = adapter.movableKeys();
         glass.setAccent(REORDER_ACCENT);
@@ -1277,6 +1278,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             return true;
         }
         int pos = focusedTilePosition();
+        if (ok && adapter.isLibraryTile(pos)) return true;   // not a place or an app to swap
         if (ok && pos >= 0) {
             if (!down) {
                 int n = adapter.movableCount();
@@ -1342,7 +1344,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     }
 
     private void pickUp(int pos) {
-        if (pos >= adapter.movableCount()) return;   // the "Default home" tile stays put
+        if (pos >= adapter.movableCount() || adapter.isLibraryTile(pos)) return;   // these tiles stay put
         movingKey = adapter.keyAt(pos);
         dimOthers();
     }
@@ -1400,7 +1402,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 Toast.makeText(this, R.string.reorder_not_saved, Toast.LENGTH_SHORT).show();
             }
         }
-        if (fillDockLeavesSlots) reloadTiles();   // the empty dock slots left out while reordering come back
+        // the empty dock slots left out while reordering come back; minimal_home shows the row alone again
+        if (fillDockLeavesSlots || libraryBrowseAll) reloadTiles();
     }
 
     /**
@@ -1421,8 +1424,10 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) to = from - COLUMNS;
         else if (from + COLUMNS < n) to = from + COLUMNS;
         else to = from / COLUMNS < (n - 1) / COLUMNS ? n - 1 : from;
-        if (to < 0 || to >= n || to == from) return;
-        keepScroll(() -> adapter.move(from, to));
+        if (adapter.isLibraryTile(to)) to += to > from ? 1 : -1;   // the library tile keeps its place
+        if (to < 0 || to >= n || to == from || adapter.isLibraryTile(to)) return;
+        final int target = to;
+        keepScroll(() -> adapter.move(from, target));
         // The owner carries this tile: where it lands decides whether it is in the dock, not dock_apps (#499).
         if (to < COLUMNS) dockInSession.add(movingKey);
         else dockInSession.remove(movingKey);
@@ -1494,6 +1499,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         });
         openPopup = appLibrary.popup;
         appLibrary.browseAll = libraryBrowseAll;
+        appLibrary.rowChange = this::setInRow;
         appLibrary.show();
     }
 
@@ -1669,6 +1675,30 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
      * The parts that never change: a larger name, the meta line and the dots, the artwork and the scrim, at
      * scrimPercent of its strength (cinematic_scrim). cinematic_art 0 leaves the artwork out, 0 percent the scrim.
      */
+    /**
+     * minimal_home, from the app library: Add to Home puts the app in the row's last app place, Remove from Home
+     * takes it out to just after the row. Saved as the owner's order, as a move with the reorder mode would be.
+     */
+    private void setInRow(String pkg, boolean add) {
+        List<String> keys = adapter.allKeys();
+        String key = null;
+        for (String k : keys) if (k.startsWith(pkg + "/")) { key = k; break; }
+        if (key == null) {
+            Toast.makeText(this, R.string.reorder_not_saved, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        keys.remove(key);
+        int row = adapter.rowApps();
+        keys.add(Math.min(add ? row - 1 : row, keys.size()), key);
+        Order order = new Order(Order.dockKey(dockApps), keys, -1);
+        if (!Order.save(Order.file(this), order)) {
+            Toast.makeText(this, R.string.reorder_not_saved, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        adapter.setSavedOrder(Order.ranks(order, dockApps), Order.docked(order, dockApps));
+        reloadTiles();
+    }
+
     /**
      * minimal_home: a small name over the dock, as tvOS shows it, and a shade from the top edge so the clock,
      * date and greeting read over a light family photo.
