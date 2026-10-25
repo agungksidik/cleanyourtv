@@ -1,10 +1,14 @@
 # Family Home TV
 
-A family Home screen for Android TV and Google TV: photos from a shared Google Photos album on today's
-date in earlier years, the five prayer times and football fixtures, right on Home, no clicks. Built for a
-family in Indonesia on top of the [cleanyourtv](https://github.com/Gathin23/cleanyourtv) launcher and tools
-(MIT), whose own README is kept in [UPSTREAM.md](UPSTREAM.md). It runs every day on two TCL 32" G06 sets
-(Google TV 11, 1.4 GB RAM).
+A family Home screen for Android TV and Google TV in the style of Apple TV: the family's own photos full
+screen behind one row of apps, the five prayer times and football fixtures under the clock, and the same
+photos in the screensaver. Every other app is one press away in a grid that scrolls down, and the family sets
+the row's order on the TV itself. Built for a family in Indonesia on top of the
+[cleanyourtv](https://github.com/Gathin23/cleanyourtv) launcher and tools (MIT), whose own README is kept in
+[UPSTREAM.md](UPSTREAM.md). It runs every day on two TCL 32" G06 sets (Google TV 11, 1.4 GB RAM).
+
+An older layout is still there: a carousel of photos from a shared Google Photos album, taken on today's date
+in earlier years.
 
 ![Family Home on a TCL 32" G06 with minimal_home: prayer times and football under the clock, one row of apps with the app library as its last tile. On the TV the wallpapers are the family's own photos](docs/fork/family-home.jpg)
 
@@ -13,7 +17,9 @@ What it adds to the cleanyourtv launcher:
 | Part | What it does | Network |
 |---|---|---|
 | Minimal Home (`minimal_home`, `library_tile`) | One row of apps over the family's own photos, a small name above it, the app library as the last tile: a grid of every TV app that scrolls down. Hold OK on a tile to reorder. See section 4b. | none |
-| Photo carousel (`photo_panel`) | Four cards above the dock: three narrow and one wide with the date the photo was taken. A new picture comes in every 9 seconds and the others move left. | none in the launcher |
+| One step per volume press (`volume_step`) | Vol+ and Vol- move one step per press and repeat while held. On TCL G06 the key helper made each press move two. | none |
+| Your photos in the screensaver (add-on `photo-screensaver`, `sync.sh`) | The same photos as Home, three at a time as prints, with the clock. | none |
+| Photo carousel (`photo_panel`), older layout | Four cards above the dock: three narrow and one wide with the date the photo was taken. A new picture comes in every 9 seconds and the others move left. | none in the launcher |
 | Prayer times (`prayer_location`) | One row under the clock: Subuh, Dzuhur, Ashar, Maghrib, Isya, the next one lit. Computed on the TV with Kemenag's angles (Fajr 20°, Isha 18°), within a minute of Aladhan's method 20. | none |
 | Football (`football_row`) | One cell after the prayer times, turning every 8 seconds: Timnas Indonesia, Liga 1 and the Champions League, with live scores. | none in the launcher |
 | Album sync (add-on `photo-screensaver`) | Reads a shared Google Photos album once a day and keeps up to 30 photos taken on today's date in earlier years. Also the TV's screensaver. | `photos.google.com` |
@@ -23,24 +29,29 @@ The launcher still has no `INTERNET` permission. The two add-ons fetch the data 
 through content providers protected by a **signature** permission, so only apps signed with the same key can
 read them. Build all three on the same computer and they share its debug key.
 
-All three keys are off unless a theme turns them on.
+Every key is off unless a theme turns it on.
 
 ## Ringkasan (Bahasa Indonesia)
 
 Proyek ini mengubah home Android TV menjadi layar keluarga:
 
-- **Carousel foto** dari album Google Photos bersama. Setiap hari TV memilih foto yang diambil pada tanggal
-  yang sama di tahun-tahun sebelumnya ("hari ini, tahun lalu").
+- **Foto keluarga sendiri** sebagai background penuh, dengan satu baris aplikasi di bawah, ala Apple TV.
+  Foto di-crop otomatis ke layar TV tanpa memotong wajah. Screensaver memakai foto yang sama.
+- **Pustaka aplikasi** di ujung baris: semua aplikasi TV dalam grid yang di-scroll ke bawah. Urutan baris
+  diatur sendiri di TV (tahan OK, lalu Pindahkan atau Tambah ke Beranda).
 - **Jadwal sholat** 5 waktu di bawah jam. Dihitung di TV dengan metode Kemenag, tanpa internet.
 - **Jadwal bola** Timnas, Liga 1 dan Liga Champions, berganti otomatis, dengan skor live.
+- **Volume** naik/turun satu langkah per tekan di TCL G06, dan terus berubah kalau tombol ditahan.
+- Pilihan lama: **carousel foto** dari album Google Photos bersama ("hari ini, tahun lalu").
 
 Cara termudah: buka Claude Code (atau agen AI lain yang bisa menjalankan perintah) di komputer yang satu
 Wi-Fi dengan TV, lalu tempel prompt di bagian [Prompt for a coding agent](#prompt-for-a-coding-agent).
-Agen akan bertanya kota, link album, dan liga yang diinginkan, lalu memasang semuanya.
+Agen akan bertanya kota, liga, dan meminta Anda menyiapkan satu folder berisi 10 sampai 30 foto keluarga,
+lalu memasang semuanya. Foto Anda tetap di komputer dan TV, tidak pernah masuk git.
 
 Catatan:
 
-- Album dibaca seperti halaman web Google Photos membacanya, bukan lewat API resmi. Kalau Google mengubah
+- Dengan carousel album: album dibaca seperti halaman web Google Photos membacanya, bukan lewat API resmi. Kalau Google mengubah
   halamannya, sinkronisasi berhenti; foto yang sudah ada tetap tampil.
 - Siapa pun yang punya link album bisa melihat isinya. Pakai album khusus untuk TV.
 - Data bola dari ESPN juga tidak resmi. Liga 1 kosong selama ESPN belum memuat musim berjalan.
@@ -53,7 +64,8 @@ Catatan:
 - A Mac, Linux or Windows computer on the same network, with JDK 17 and Android SDK 34 (see the launcher's
   build section in [UPSTREAM.md](UPSTREAM.md)), and `python3 -m venv tools/venv && tools/venv/bin/pip install -r tools/requirements.txt`.
 - USB debugging on the TV (Settings > System > Developer options), and its IP address.
-- For photos: a Google Photos album made for the TV, shared by link (Share > Create link). A **live album**
+- For the photo Home: a folder of 10 to 30 of your own photos (landscape fills the screen best). For the older
+  carousel instead: a Google Photos album made for the TV, shared by link (Share > Create link); a **live album**
   that adds photos of chosen people by itself keeps it filled without any work.
 
 ## Tutorial
