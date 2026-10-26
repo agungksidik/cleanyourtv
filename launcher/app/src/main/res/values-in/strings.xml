@@ -104,4 +104,10 @@
     <string name="race_live">%1$s · langsung</string>
     <string name="race_finished">Bendera finis</string>
     <string name="last_opened">Terakhir dibuka %1$s</string>
+    <string name="power_off">Matikan</string>
+    <string name="restart">Nyalakan ulang</string>
+    <string name="power_needs_helper">Aktifkan dulu Tombol beranda di Aksesibilitas</string>
+    <string name="close_last_app">Tutup aplikasi terakhir</string>
+    <string name="no_last_app">Belum ada aplikasi yang dibuka dari Home</string>
+    <string name="force_stop">Paksa berhenti</string>
 </resources>

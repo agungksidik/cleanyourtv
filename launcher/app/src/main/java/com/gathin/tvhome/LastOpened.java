@@ -22,6 +22,19 @@ final class LastOpened {
         prefs(ctx).edit().putLong(pkg, System.currentTimeMillis()).apply();
     }
 
+    /** The app Home or a remote button opened last, or null. */
+    static String latest(Context ctx) {
+        String pkg = null;
+        long newest = 0L;
+        for (java.util.Map.Entry<String, ?> e : prefs(ctx).getAll().entrySet()) {
+            if (e.getValue() instanceof Long && (Long) e.getValue() > newest) {
+                newest = (Long) e.getValue();
+                pkg = e.getKey();
+            }
+        }
+        return pkg;
+    }
+
     /** Milliseconds since the epoch, or 0 when Home never opened the app. */
     static long get(Context ctx, String pkg) {
         return pkg == null ? 0L : prefs(ctx).getLong(pkg, 0L);

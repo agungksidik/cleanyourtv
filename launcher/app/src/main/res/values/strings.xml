@@ -145,4 +145,10 @@
     <!-- Cinematic top shelf (cinematic_home): the line under the focused dock app's name; %1$s is when it was
          last opened, e.g. "5 minutes ago" or "yesterday, 9:40 pm". -->
     <string name="last_opened">Last opened %1$s</string>
+    <string name="power_off">Turn off</string>
+    <string name="restart">Restart</string>
+    <string name="power_needs_helper">Turn on the Home button helper in Accessibility first</string>
+    <string name="close_last_app">Close last app</string>
+    <string name="no_last_app">No app opened from Home yet</string>
+    <string name="force_stop">Force stop</string>
 </resources>

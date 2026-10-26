@@ -19,6 +19,7 @@ import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
 import java.util.Collections;
@@ -72,9 +73,13 @@ public class HomeKeyService extends AccessibilityService {
         }
     };
 
+    /** The connected service, for Home's power_row buttons; null while it is off. */
+    private static volatile HomeKeyService running;
+
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
+        running = this;
         settingsScancodes = getResources().getIntArray(R.array.settings_key_scancodes);
         // The service is directBootAware: Android 11 skips a service that is not while the user is still
         // locked at boot, writes accessibility_enabled=0 and, on TCL G03 firmware, never binds it after the
@@ -107,7 +112,9 @@ public class HomeKeyService extends AccessibilityService {
 
     @Override
     public void onDestroy() {
+        if (running == this) running = null;
         handler.removeCallbacks(volumeRepeat);
+        handler.removeCallbacks(clickStep);
         stopWaitingForUnlock();
         if (gamepads != null) gamepads.stop();
         super.onDestroy();
@@ -210,6 +217,7 @@ public class HomeKeyService extends AccessibilityService {
     /** Unbound by Android: the user turned the helper off, so Home doesn't put it back (ServiceRepair). */
     @Override
     public boolean onUnbind(Intent intent) {
+        if (running == this) running = null;
         if (repairRecord) ServiceRepair.disconnected(this, getClass());
         return super.onUnbind(intent);
     }
@@ -263,6 +271,108 @@ public class HomeKeyService extends AccessibilityService {
 
     static boolean isShortPress(long downTime, long upTime, long longPressTimeout) {
         return upTime - downTime < longPressTimeout;
+    }
+
+    /**
+     * power_row: standby, as a short press of Power. The power dialog a long press shows is not offered: TCL G06
+     * firmware ignores GLOBAL_ACTION_POWER_DIALOG, and shutting down needs the system-only SHUTDOWN permission.
+     * False when the service is off.
+     */
+    static boolean standby() {
+        HomeKeyService s = running;
+        return s != null && s.performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN);
+    }
+
+    /** Settings labels in the TV's languages: System's Restart item, App info's Force stop and its OK. */
+    private static final String[] RESTART_LABELS = {"Nyalakan Ulang", "Mulai ulang", "Restart"};
+    private static final String[] FORCE_STOP_LABELS = {"Paksa berhenti", "Force stop"};
+    private static final String[] OK_LABELS = {"Oke", "OK"};
+    private static final long CLICK_STEP_MS = 400;
+    private static final int CLICK_STEPS = 20;
+    /** The labels to click in Settings, one stage after another; Home comes back after the last when homeAfter. */
+    private String[][] clickPlan;
+    private int clickStage;
+    private int clickSteps;
+    private boolean homeAfter;
+    private final Runnable clickStep = new Runnable() {
+        @Override
+        public void run() {
+            if (clickSteps-- <= 0) {
+                if (homeAfter) openHome();
+                return;
+            }
+            int result = clickOnce(clickPlan[clickStage]);
+            if (result > 0 && ++clickStage < clickPlan.length) {
+                clickSteps = CLICK_STEPS;
+            } else if (result != 0) {
+                // The last stage was clicked, or the item is greyed out (an app that is not running).
+                if (homeAfter) handler.postDelayed(HomeKeyService.this::openHome, 600);
+                return;
+            }
+            handler.postDelayed(this, CLICK_STEP_MS);
+        }
+    };
+
+    /**
+     * power_row: Settings, System is opened by Home; this clicks its Restart item, at the end of the list, so the
+     * TV's own "Restart now?" question comes up. Apps cannot restart the TV, Settings can. False when the service is off.
+     */
+    static boolean openRestart() {
+        return plan(new String[][]{RESTART_LABELS}, false);
+    }
+
+    /** Force stop: App info is opened by Home; this clicks Force stop and OK, then goes Home. False when off. */
+    static boolean forceStop() {
+        return plan(new String[][]{FORCE_STOP_LABELS, OK_LABELS}, true);
+    }
+
+    private static boolean plan(String[][] stages, boolean home) {
+        HomeKeyService s = running;
+        if (s == null) return false;
+        s.clickPlan = stages;
+        s.clickStage = 0;
+        s.clickSteps = CLICK_STEPS;
+        s.homeAfter = home;
+        s.handler.removeCallbacks(s.clickStep);
+        s.handler.postDelayed(s.clickStep, CLICK_STEP_MS);
+        return true;
+    }
+
+    /**
+     * One try in Settings: 1 when an item with one of these labels was clicked, -1 when it is greyed out, 0 to try
+     * again (not on screen yet: the list is scrolled towards it, or it was given the focus first).
+     */
+    private int clickOnce(String[] labels) {
+        AccessibilityNodeInfo root = getRootInActiveWindow();
+        if (root == null || root.getPackageName() == null
+                || !"com.android.tv.settings".contentEquals(root.getPackageName())) return 0;
+        for (String label : labels) {
+            for (AccessibilityNodeInfo n : root.findAccessibilityNodeInfosByText(label)) {
+                if (n.getText() == null || !label.equalsIgnoreCase(n.getText().toString().trim())) continue;
+                while (n != null && !n.isClickable()) n = n.getParent();
+                if (n == null) continue;
+                if (!n.isEnabled()) return -1;
+                // Focus first: the list scrolls the item fully into view, and a click on a half-shown item
+                // moves the focus instead of opening it. The next step clicks the focused item.
+                if (n.isFocused()) return n.performAction(AccessibilityNodeInfo.ACTION_CLICK) ? 1 : 0;
+                n.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
+                return 0;
+            }
+        }
+        AccessibilityNodeInfo list = scrollable(root);
+        if (list != null) list.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+        return 0;
+    }
+
+    /** The first node that scrolls forward, depth first: the System list, left of the preview pane. */
+    private static AccessibilityNodeInfo scrollable(AccessibilityNodeInfo n) {
+        if (n == null) return null;
+        if (n.isScrollable()) return n;
+        for (int i = 0; i < n.getChildCount(); i++) {
+            AccessibilityNodeInfo found = scrollable(n.getChild(i));
+            if (found != null) return found;
+        }
+        return null;
     }
 
     private void openHome() {

@@ -195,6 +195,9 @@ final class Config {
     boolean libraryTile;
     /** Home as one dock row with a small name, darker glass and a top shade (theme minimal_home). */
     boolean minimalHome;
+    /** Power, Restart and TV as round buttons under the dock (theme power_row); the TV button opens tv_app, a package or "input:<id>". */
+    boolean powerRow;
+    String tvApp = "";
     /** The dock band's padding equals the gap between its tiles (config.xml, dock_even_padding); false keeps the fixed padding. */
     final boolean dockEvenPadding;
     /** The dock position dots under the cinematic shelf's name (config.xml, cinematic_dots); false leaves them out. */
@@ -540,6 +543,8 @@ final class Config {
         config.volumeStep = json != null && bool(json, "volume_step", false);
         config.libraryTile = json != null && bool(json, "library_tile", false);
         config.minimalHome = json != null && bool(json, "minimal_home", false);
+        config.powerRow = json != null && bool(json, "power_row", false);
+        config.tvApp = json == null ? "" : string(json, "tv_app", "");
         return config;
     }
 

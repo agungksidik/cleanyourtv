@@ -184,6 +184,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private View racePanel;
     private PhotoPanel photoPanel;
     private HomeInfo homeInfo;
+    /** power_row: Power, Restart and TV under the dock; null when the theme leaves it off. */
+    private PowerRow powerRow;
     private TextView raceKicker, raceHeadline, raceSessions;
     /** config.xml show_stats, overridable by a theme. Off: the line is gone and nothing is read. */
     private boolean showStats;
@@ -535,6 +537,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (!cfg.prayerLocation.isEmpty() || cfg.footballRow) {
             homeInfo = new HomeInfo(this, root, layer, cfg.prayerLocation, cfg.footballRow, cfg.minimalHome);
             if (!homeInfo.shown()) homeInfo = null;
+        }
+        if (cfg.powerRow) {
+            powerRow = new PowerRow(this, root, cfg.tvApp, () -> focusTile(lastFocused % COLUMNS), label -> {
+                hideGlass();
+                showHeroLabel(label);
+            });
         }
         if (cfg.photoPanel) {
             photoPanel = new PhotoPanel(this, root, grid, findViewById(R.id.topButtons), layer,
@@ -1711,6 +1719,13 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{0xB3000000, 0x59000000, 0x00000000, 0x00000000, 0x40000000}));
         scrim.setVisibility(View.VISIBLE);
+        // The greeting and date are faint white by default; over a photo they get full white and a dark shadow.
+        float d = getResources().getDisplayMetrics().density;
+        for (int id : new int[]{R.id.greeting, R.id.clock, R.id.ampm, R.id.date}) {
+            TextView t = findViewById(id);
+            if (id != R.id.clock) t.setTextColor(0xF2FFFFFF);
+            t.setShadowLayer(6 * d, 0, 1.5f * d, 0xCC000000);
+        }
     }
 
     private void setUpCinematicShelf(int scrimPercent) {
@@ -1935,6 +1950,15 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             setAmbient(color);
             ambient.animate().alpha(1f).setDuration(500).start();
         }).start();
+    }
+
+    /** power_row: a round button's name in the dock name's place, which stays where the dock left it. */
+    private void showHeroLabel(String label) {
+        hero.animate().cancel();
+        heroName.setText(label);
+        hero.setTranslationX(0f);
+        hero.animate().alpha(1f).setDuration(reducedMotion || !animations ? 0 : 160).start();
+        heroShown = true;
     }
 
     private void hideHero() {
@@ -2178,6 +2202,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             int lastRowStart = ((count - 1) / COLUMNS) * COLUMNS;
             if (position >= lastRowStart) {
                 if (adapter.isLibraryAt(count)) focusLibrary();
+                else if (powerRow != null) {
+                    RecyclerView.ViewHolder tile = grid.findViewHolderForAdapterPosition(position);
+                    int[] at = new int[2];
+                    if (tile != null) tile.itemView.getLocationInWindow(at);
+                    powerRow.focus(tile == null ? root.getWidth() / 2f : at[0] + tile.itemView.getWidth() / 2f);
+                }
                 return true;
             }
             target = Math.min(position + COLUMNS, count - 1);
@@ -3067,6 +3097,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         });
         addSettingsMenuRow(rows, popup, R.string.library_app_info, () -> open(new Intent(
                 Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + pkg))));
+        if (powerRow != null) addSettingsMenuRow(rows, popup, R.string.force_stop, () -> PowerRow.forceStop(this, pkg));
         panel.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         popup.setWidth(Math.max((int) (200 * density), panel.getMeasuredWidth()));
         // Dock tiles sit near the bottom of the screen: open the menu above the tile when it would not fit below.

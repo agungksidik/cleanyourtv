@@ -54,7 +54,7 @@ final class HomeInfo {
     private int page;
     private boolean running;
 
-    /** minimal_home: a tinted, less see-through glass, so the text reads over light photos. */
+    /** minimal_home: a tinted glass, as see-through as the default so faces in the photo show. */
     private final boolean tinted;
 
     HomeInfo(Context context, FrameLayout root, View contentLayer, String prayerLocation, boolean footballRow, boolean tinted) {
@@ -132,7 +132,7 @@ final class HomeInfo {
     private GradientDrawable glass(boolean lit) {
         GradientDrawable g = new GradientDrawable();
         g.setCornerRadius(14 * dp);
-        g.setColor(lit ? 0xE62E9E5B : tinted ? 0xB31A2230 : 0x59000000);
+        g.setColor(lit ? 0xE62E9E5B : tinted ? 0x591A2230 : 0x59000000);
         g.setStroke(Math.max(1, dp(1)), lit ? 0x66FFFFFF : 0x2EFFFFFF);
         return g;
     }
