@@ -10,13 +10,14 @@ the row's order on the TV itself. Built for a family in Indonesia on top of the
 An older layout is still there: a carousel of photos from a shared Google Photos album, taken on today's date
 in earlier years.
 
-![Family Home on a TCL 32" G06 with minimal_home: prayer times and football under the clock, one row of apps with the app library as its last tile. On the TV the wallpapers are the family's own photos](docs/fork/family-home.jpg)
+![Family Home on a TCL 32" G06 with minimal_home: prayer times and football under the clock, one row of apps with the app library as its last tile, and the power row under it with Standby focused. On the TV the wallpapers are the family's own photos](docs/fork/family-home.jpg)
 
 What it adds to the cleanyourtv launcher:
 
 | Part | What it does | Network |
 |---|---|---|
 | Minimal Home (`minimal_home`, `library_tile`) | One row of apps over the family's own photos, a small name above it, the app library as the last tile: a grid of every TV app that scrolls down. Hold OK on a tile to reorder. See section 4b. | none |
+| Power row (`power_row`, `tv_app`) | Round buttons under the row: standby, restart, the TV tuner and close the last app. Restart and close go through Settings, which the key helper presses for you (an app may not restart the TV or stop another app); the TV still asks before it restarts. Hold OK on a tile also offers Force stop. See section 4c. | none |
 | One step per volume press (`volume_step`) | Vol+ and Vol- move one step per press and repeat while held. On TCL G06 the key helper made each press move two. | none |
 | Your photos in the screensaver (add-on `photo-screensaver`, `sync.sh`) | The same photos as Home, three at a time as prints, with the clock. | none |
 | Photo carousel (`photo_panel`), older layout | Four cards above the dock: three narrow and one wide with the date the photo was taken. A new picture comes in every 9 seconds and the others move left. | none in the launcher |
@@ -41,6 +42,8 @@ Proyek ini mengubah home Android TV menjadi layar keluarga:
   diatur sendiri di TV (tahan OK, lalu Pindahkan atau Tambah ke Beranda).
 - **Jadwal sholat** 5 waktu di bawah jam. Dihitung di TV dengan metode Kemenag, tanpa internet.
 - **Jadwal bola** Timnas, Liga 1 dan Liga Champions, berganti otomatis, dengan skor live.
+- **Tombol bulat** di bawah baris aplikasi: standby, nyalakan ulang, TV digital, dan tutup paksa aplikasi
+  terakhir (misalnya YouTube yang tidak mau tersambung internet). Tahan OK di tile juga ada Paksa berhenti.
 - **Volume** naik/turun satu langkah per tekan di TCL G06, dan terus berubah kalau tombol ditahan.
 - Pilihan lama: **carousel foto** dari album Google Photos bersama ("hari ini, tahun lalu").
 
@@ -165,6 +168,26 @@ bash addons/photo-screensaver/sync.sh work/family-photos/wallpapers        # sam
 ```
 
 Hold OK on a tile and pick Move to change the order of the row; the app library tile stays last.
+
+### 4c. Optional: the power row
+
+With `minimal_home`, add `"power_row": true` to the theme for four round buttons under the row of apps:
+
+| Button | What it does |
+|---|---|
+| Standby | The same as a short press of Power. A real shutdown needs a system permission no app has. |
+| Restart | Opens Settings > System and selects Restart; the TV asks "Restart now?" with Cancel focused. |
+| TV | Opens `tv_app`: a package, or `input:<id>` for a tuner, as in `app_keys`. |
+| Close last app | Force stops the app opened last from Home or a remote button, then comes back Home. |
+
+Restart and Close need the key helper (HomeKeyService) on, and they press Settings items by their names in
+English or Indonesian; in another language those two buttons do nothing. The helper may now read the screen
+(`canRetrieveWindowContent`) for this. On a TCL G06 the remote's TV button (keycode 4001) can open the tuner too:
+
+```bash
+tools/tv.py "dumpsys tv_input" | grep -o 'id=[^ ,]*TDTVInputService[^ ,]*'   # the tuner's input id
+# config.json: "tv_app": "input:<id>", and in app_keys: "4001:input:<id>"
+```
 
 ### 5. Answer the card prompts and close ADB
 
